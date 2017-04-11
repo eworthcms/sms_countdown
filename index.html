@@ -17,7 +17,7 @@ body{padding:100px;text-align: center;}
 <input type="button" class="sameBtn btnCur" value="发送验证码"/>
 <div class="sameBtn btnCur2">发送验证码</div>
 <script type="text/javascript">
-//新增短信倒计时功能
+//短信倒计时功能
 /**使用方式如下：
  * $(".btnCur").CountDownF({
  *		time:120,
@@ -34,8 +34,10 @@ body{padding:100px;text-align: center;}
  *	});
  * 
  * */
+
 ;(function($,window,document,undefined){
 	var pluginName = 'CountDownF',
+	version = 1.1,
 	defaluts = {
 		time:120,
 		resetWords:'重新发送', //文字定义
@@ -56,7 +58,7 @@ body{padding:100px;text-align: center;}
 		init:function(){
 			var self = this;
 			self.$element.on('click',function(){
-				if(self.state){
+				if(self.state && self.settings.countState){
 					self.state = false;
 					if(self.settings.countState){
 						self._count();
@@ -88,13 +90,18 @@ body{padding:100px;text-align: center;}
 				},1000);
 			}
 		},
-
+		
+		//修改是否可发送短信验证码倒计时状态
+		change:function(state){
+			var self = this;
+			self.settings.countState = state;
+		},
+		
 		//置为初始状态
 		_clearInit:function(){
 			var self = this;
-			this.$element.removeClass(self.settings.clickClass);
-			this.$element.attr('type') ? this.$element.val(self.settings.resetWords) : this.$element.html(self.settings.resetWords); 
-			console.log(self.clearCount);
+			self.$element.removeClass(self.settings.clickClass);
+			self.$element.attr('type') ? self.$element.val(self.settings.resetWords) : self.$element.html(self.settings.resetWords); 
 			clearTimeout(self.clearCount);
 			self.number = self.settings.time;
 			self.state = true;
@@ -135,6 +142,7 @@ body{padding:100px;text-align: center;}
 	}
 
 })(jQuery,window,document);
+
 
 $(function(){
 	$(".btnCur").CountDownF({
